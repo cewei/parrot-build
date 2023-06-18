@@ -25,4 +25,22 @@
   shell:
     cmd: "dconf load /org/mate/terminal/profiles/video/ < {{ role_path }}/files/dconf-dump-video"
   when: "'video' not in profile_list.value"
+- name: "Copy vpn bash"
+  copy: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - { src: "{{ role_path }}/files/vpnbash.sh", dest: "/opt" }
+    - { src: "{{ role_path }}/files/vpnpanel.sh", dest: "/opt" }
+    - { src: "{{ role_path }}/files/vpnserver.sh", dest: "/opt" }
+  become: true
+  become_method: sudo
+
+- name: "Copy BashRC-htb"
+  copy:
+    src: "{{ role_path }}/files/.bashrc-htb"
+    dest: "{{ ansible_env.HOME }}/.bashrc"
 
